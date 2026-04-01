@@ -20,7 +20,7 @@ spec:
       managementState: Managed
       registriesNamespace: rhoai-model-registries
     ray:
-      managementState: Removed
+      managementState: Managed
     trainingoperator:
       managementState: Managed
     trustyai:
