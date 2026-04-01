@@ -1,0 +1,50 @@
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  name: team-alpha-workbench
+  namespace: team-alpha-ai
+  labels:
+    app: team-alpha-workbench
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/odh-managed: "true"
+  annotations:
+    notebooks.opendatahub.io/inject-oauth: "true"
+    notebooks.opendatahub.io/last-image-selection: "s2i-generic-data-science-notebook:2024.2"
+    opendatahub.io/accelerator-name: ""
+    openshift.io/display-name: "Team Alpha Workbench"
+    openshift.io/description: "GitOps-provisioned workbench with Vault-backed secrets"
+spec:
+  template:
+    spec:
+      containers:
+        - name: team-alpha-workbench
+          image: "quay.io/modh/odh-generic-data-science-notebook@sha256:d0ba5fc23e2b3846763f60e8ade8a0f561cdcd2bf6717df6e732f6f8b68b89c4"
+          envFrom:
+            - secretRef:
+                name: team-alpha-s3
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          ports:
+            - containerPort: 8888
+              name: notebook-port
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /notebook/team-alpha-ai/team-alpha-workbench/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /notebook/team-alpha-ai/team-alpha-workbench/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes: []

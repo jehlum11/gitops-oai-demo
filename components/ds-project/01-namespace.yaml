@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-alpha-ai
+  labels:
+    opendatahub.io/dashboard: "true"
+    kubernetes.io/metadata.name: team-alpha-ai
+  annotations:
+    openshift.io/display-name: "Team Alpha AI Project"
+    openshift.io/description: "Fully GitOps-managed data science project"
